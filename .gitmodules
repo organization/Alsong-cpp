@@ -1,18 +1,9 @@
-[submodule "mine"]
-	path = mine
-	url = https://github.com/amrayn/mine.git
 [submodule "cpp-httplib"]
 	path = cpp-httplib
 	url = https://github.com/yhirose/cpp-httplib.git
-[submodule "cryptopp-cmake"]
-	path = cryptopp-cmake
-	url = https://github.com/noloader/cryptopp-cmake.git
 [submodule "mbedcrypto"]
 	path = mbedcrypto
 	url = https://github.com/azadkuh/mbedcrypto
-[submodule "include/alsongpp/date"]
-	path = include/alsongpp/date
-	url = https://github.com/HowardHinnant/date.git
 [submodule "date"]
 	path = date
 	url = https://github.com/HowardHinnant/date.git
