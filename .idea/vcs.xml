@@ -2,5 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/cpp-httplib" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/date" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/mesalink" vcs="Git" />
   </component>
 </project>

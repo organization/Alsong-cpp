@@ -1,9 +1,9 @@
 [submodule "cpp-httplib"]
 	path = cpp-httplib
 	url = https://github.com/yhirose/cpp-httplib.git
-[submodule "mbedcrypto"]
-	path = mbedcrypto
-	url = https://github.com/azadkuh/mbedcrypto
 [submodule "date"]
 	path = date
 	url = https://github.com/HowardHinnant/date.git
+[submodule "json"]
+	path = json
+	url = https://github.com/nlohmann/json.git
