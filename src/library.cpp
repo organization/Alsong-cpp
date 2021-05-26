@@ -95,7 +95,7 @@ namespace alsongpp {
         return result;
     }
 
-    LyricInfo Alsong::get_lyric_by_id(std::string_view lyric_id) {
+    LyricInfo Alsong::get_lyric_by_id(int64_t lyric_id) {
         httplib::Client http_client(alsong_base_url);
         http_client.enable_server_certificate_verification(false);
 
@@ -104,7 +104,7 @@ namespace alsongpp {
         httplib::MultipartFormData lyric_id_form{
                 .name = "info_id",
         };
-        lyric_id_form.content = lyric_id;
+        lyric_id_form.content = std::to_string(lyric_id);
         form_data_items.emplace_back(lyric_id_form);
 
         httplib::MultipartFormData enc_data_form{

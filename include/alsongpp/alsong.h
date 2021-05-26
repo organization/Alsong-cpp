@@ -65,7 +65,7 @@ namespace alsongpp {
         Alsong();
         void refresh_enc_key();
         std::vector<SearchResult> get_resemble_lyric_list(std::string_view artist, std::string_view title, int32_t playtime = 0, int32_t page = 1);
-        LyricInfo get_lyric_by_id(std::string_view lyric_id);
+        LyricInfo get_lyric_by_id(int64_t lyric_id);
         LyricLookup get_lyric_by_hash(std::string_view md5);
         LyricMurekaId get_lyric_by_mureka_id(int64_t mureka_id);
     private:
