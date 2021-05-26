@@ -215,7 +215,7 @@ namespace alsongpp {
             RSA_set0_key(rsa, bnN, bnE, nullptr);
             auto data = date::format(
                     "ALSONG_ANDROID_%4Y%2m%2d_%2H%2M%2S",
-                    date::make_zoned(date::locate_zone("Etc/UTC"), std::chrono::system_clock::now())
+                    std::chrono::system_clock::now()
             );
 
             auto len = RSA_size(rsa);
