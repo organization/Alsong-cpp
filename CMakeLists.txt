@@ -11,10 +11,11 @@ find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 
 include_directories(cpp-httplib)
+add_subdirectory(date)
 include_directories(date/include)
 
 include_directories(json/include)
 
 include_directories(include)
 add_library(${PROJECT_NAME} src/library.cpp)
-target_link_libraries(${PROJECT_NAME} ${OPENSSL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE date::date ${OPENSSL_LIBRARIES})
