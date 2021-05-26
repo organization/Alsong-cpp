@@ -57,7 +57,7 @@ namespace alsongpp {
         form_data_items.emplace_back(enc_data_form);
         auto result = http_client.Post("/v1/search", form_data_items)->body;
 
-        nlohmann::json json = result;
+        nlohmann::json json = nlohmann::json::parse(result);
 
         std::vector<SearchResult> searchResults;
         for (auto element : json) {
@@ -82,15 +82,15 @@ namespace alsongpp {
             lyric_vec.emplace_back(lyric.substr(0, pos));
             lyric.erase(0, pos + del.length());
         }
-        static std::regex reg(R"(^\[(\d+):(\d\d).(\d\d)\](.*)$)");
+        static std::regex reg(R"(^(.)?\[(\d+):(\d\d).(\d\d)\](.*)$)");
         for (const auto& element : lyric_vec) {
             std::smatch match;
 
             if (!std::regex_match(element, match, reg)) {
                 return result;
             }
-            auto timestamp = 10 * std::stoi(match[1]) * 60 * 100 + std::stoi(match[2]) * 100 + std::stoi(match[3]);
-            result[timestamp].emplace_back(match[4]);
+            auto timestamp = 10 * std::stoi(match[2]) * 60 * 100 + std::stoi(match[3]) * 100 + std::stoi(match[4]);
+            result[timestamp].emplace_back(match[5]);
         }
         return result;
     }
@@ -113,7 +113,7 @@ namespace alsongpp {
         form_data_items.emplace_back(enc_data_form);
         auto result = http_client.Post("/v1/info", form_data_items)->body;
 
-        nlohmann::json json_result = result;
+        nlohmann::json json_result = nlohmann::json::parse(result);
 
         LyricInfo lyric_info{
                 .register_url = to_string(json_result["register_url"]),
@@ -152,7 +152,7 @@ namespace alsongpp {
         form_data_items.emplace_back(enc_data_form);
         auto result = http_client.Post("/v1/lookup", form_data_items)->body;
 
-        nlohmann::json json_result = result;
+        nlohmann::json json_result = nlohmann::json::parse(result);
 
         LyricLookup lyric_info{
                 .register_url = to_string(json_result["register_url"]),
@@ -190,7 +190,7 @@ namespace alsongpp {
         form_data_items.emplace_back(mureka_id_form);
         auto result = http_client.Post("/v1/lookupListByMurekaId", form_data_items)->body;
 
-        nlohmann::json json_result = result;
+        nlohmann::json json_result = nlohmann::json::parse(result);
 
         LyricMurekaId lyric_info;
         decltype(lyric_info.lyric) lyrics;
@@ -207,19 +207,20 @@ namespace alsongpp {
 
     std::string set_enc_key() {
         std::string enc_key;
-        auto key = reinterpret_cast<const unsigned char*>(ALKEY);
         auto rsa = RSA_new();
         if (rsa) {
-            auto bnN = BN_bin2bn(key, sizeof(key), nullptr);
-            auto bnE = BN_bin2bn(key, sizeof(key), nullptr);
+            BIGNUM* bnN = nullptr;
+            BIGNUM* bnE = nullptr;
+            BN_hex2bn(&bnN, ALKEY);
+            BN_hex2bn(&bnE, "010001");
             RSA_set0_key(rsa, bnN, bnE, nullptr);
             auto data = date::format(
-                    "ALSONG_ANDROID_%4Y%2m%2d_%2H%2M%2S",
+                    "ALSONG_ANDROID_%Y%m%d_%H%M%OS",
                     std::chrono::system_clock::now()
             );
 
             auto len = RSA_size(rsa);
-            auto *encrypted = new unsigned char[len];
+            auto encrypted = new unsigned char[len];
 
             RSA_public_encrypt(
                     static_cast<int>(data.length()),
@@ -228,9 +229,9 @@ namespace alsongpp {
                     rsa,
                     RSA_PKCS1_PADDING
             );
-            enc_key = std::string(reinterpret_cast<char const*>(encrypted), len);
-            delete[] encrypted;
+            enc_key = std::string(reinterpret_cast<const char *>(encrypted), len);
             std::transform(enc_key.begin(), enc_key.end(), enc_key.begin(), ::toupper);
+            delete[] encrypted;
             RSA_free(rsa);
         }
         return enc_key;
