@@ -61,6 +61,7 @@ namespace alsongpp {
     };
 
     class Alsong {
+    public:
         Alsong();
         void refresh_enc_key();
         std::vector<SearchResult> get_resemble_lyric_list(std::string_view artist, std::string_view title, int32_t playtime = 0, int32_t page = 1);
